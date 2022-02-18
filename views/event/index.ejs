@@ -1,0 +1,118 @@
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+
+
+<%- include("../partials/flashMessages"); -%>
+
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/images/event 1.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p class="slider-title">Event Management Website <i class="fas fa-tasks"></i></p>
+        <p class="slider-text badge bg-primary">Inspiring ,Empowering And celeprating Events Creators since 1990</p>
+        <p class="button"> <a class="btn  btn-info  btn-lg" href="/events/create/event">Create Event </a></p>
+     </div>
+
+    </div>
+    <div class="carousel-item">
+      <img src="/images/event2.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p class="slider-title">Event Management Website <i class="fas fa-tasks"></i></p>
+        <p class="slider-text badge bg-primary">check The Latest Collection on Women's Dress</p>
+        <p class="button"> <a class="btn  btn-info  btn-lg" href="/events/create/event">Create Event </a></p>
+     </div>
+
+    </div>
+    <div class="carousel-item">
+      <img src="/images/event3.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p class="slider-title">Event Management Website <i class="fas fa-tasks"></i></p>
+        <p class="slider-text badge bg-primary">check The Latest Collection on Women's Dress</p>
+        <p class="button"> <a class="btn  btn-info  btn-lg" href="/events/create/event">Create Event </a></p>
+     </div>
+
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+<div class="dark" id="events">
+  <div class="cardsSection container py-3">
+    <div class="row mt-3 mb-5">
+      <div class="col-md-12">
+        <h1 class="text-center" style="text-align:center">Latest Event</h1>
+      </div>
+    </div>
+    <%allEvents.forEach((events)=>{%>
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+  <%events.forEach((event)=>{%>
+    <div class="col">
+      <div class="card mb-4 rounded-3 shadow-sm">
+
+        <div class="card-body">
+          <h3 class="card-title pricing-card-title"><%=event.title%></h3>
+          <% if(event.description.length > 90){ %>
+              <p><%=event.description.substring(0,90) + "..." %></p>
+          <%}else{%>
+              <p> <%=event.description %> </p>
+        <%  }%>
+
+          <p class="badge bg-secondary" >from: <%=event.location %>.</p>
+          <a href="<%='/events/show/'+ event._id %>"  class="w-100 btn btn-lg btn-outline-primary">Read more</a>
+        </div>
+      </div>
+    </div>
+
+  <%});%>
+
+
+      </div>
+
+    <%});%>
+
+<div class="row">
+  <div class="col-12 mt-2 mb-4">
+    <nav aria-label="...">
+   <ul class="pagination pagination-lg justify-content-center">
+     <%for(var i =1 ; i <= Math.ceil(total/6) ; i++){%>
+      <% if(pageNo == i){%>
+          <li class="page-item active"><a class="page-link" href="<%='/events/'+i %>"><%=i%></a></li>
+       <%}else{%>
+         <li class="page-item"><a class="page-link" href="<%='/events/'+i %>"><%=i%></a></li>
+       <%}%>
+
+     <%}%>
+
+
+
+   </ul>
+ </nav>
+
+  </div>
+</div>
+
+  </div>
+
+</div>
+
+
+
+
+<%- include("../partials/footer"); -%>

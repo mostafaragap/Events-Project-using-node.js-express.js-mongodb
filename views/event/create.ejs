@@ -1,0 +1,35 @@
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+
+<div class="container cardsSection">
+  <h1 class="display-4">create from here:</h1><hr />
+<%- include("../partials/flashMessages"); -%>
+
+
+
+
+
+
+
+  <form action="/events/create" method="post">
+
+    <div class="form-group" style="font-size:1.5rem">
+        <label for="">Title</label>
+    <input name="title" type="text" class="form-control " aria-describedby="basic-addon1">
+
+      <label for="">Post</label>
+    <textarea name="description" class="form-control" rows="5" cols="100" placeholder="What's up?" ></textarea>
+
+    <label for="">Location</label>
+  <input name="location" type="text" class="form-control" aria-describedby="basic-addon1">
+
+  <label for="">Date</label>
+  <input name="date" type="date" id="date" class="form-control" aria-describedby="basic-addon1">
+    </div>
+
+
+    <button class="btn btn-primary" type="submit" name="button">Publish</button>
+  </form>
+</div>
+
+<%- include("../partials/footer"); -%>

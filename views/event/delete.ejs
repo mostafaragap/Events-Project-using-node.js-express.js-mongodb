@@ -1,0 +1,32 @@
+<%if(!(user.isAdmin)){%>
+  <%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+<%}%>
+
+<%- include("../partials/adminLayout"); -%>
+
+<div class="container">
+
+  <div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
+      <div class="col-md-6 px-0">
+        <h1 class="display-4 fst-italic text-capitalize"><%=event.title %></h1>
+<hr>
+
+<p class="lead my-3"><%=event.description %></p>
+<h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-secondary"><%=event.date.toDateString() %></i></h4>
+<br />
+<form class="" action="/events/deleteevent" method="post">
+  <input type="hidden" name="eventId" value="<%=event._id %>"></input>
+  <button class="btn btn-danger" type="submit" value="<%=event._id%>" name="button">Confirm Delete</button>
+</form>
+
+
+
+</div>
+</div>
+
+
+<%if(!(user.isAdmin)){%>
+<%- include("../partials/footer"); -%>
+<%}%>
+<%- include("../partials/adminFooter"); -%>

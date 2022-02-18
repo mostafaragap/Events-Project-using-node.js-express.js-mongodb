@@ -1,0 +1,79 @@
+<%- include("../partials/adminLayout"); -%>
+
+
+
+
+</table>
+
+<section class="content">
+  <div class="container-fluid">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+
+      <%allUsers.forEach((users)=>{%>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">City</th>
+              <th scope="col">Created at</th>
+              <th scope="col">Statues</th>
+              <th scope="col"> Actions</th>
+            </tr>
+          </thead>
+
+<tbody>
+     <%users.forEach((singleuser,i)=>{%>
+
+        <tr>
+           <th scope="row"><%=i+1%></th>
+           <%if(user.id === singleuser.id){%>
+               <td> <%=singleuser.firstName + " "+ singleuser.lastName+' ' %>(you) </td>
+           <%} else{%>
+               <td> <%=singleuser.firstName + " "+ singleuser.lastName %> </td>
+        <%   }%>
+
+          <td><%=singleuser.email %></td>
+          <td><%=singleuser.city %></td>
+        <%  if(singleuser.isActive === false ){%>
+            <td>Blocked</td>
+        <%  }else{%>
+              <td>Active</td>
+          <%}%>
+
+          <td><%=singleuser.created_At.toDateString() %></td>
+          <td>
+
+   <a class="btn btn-info" href="/admins/showUserProfile/<%=singleuser.id%>">View Profile</a>
+
+
+
+
+
+
+
+
+
+            </td>
+
+
+        </tr>
+
+
+     <%});%>
+      </tbody>
+
+
+
+
+      <%});%>
+
+
+
+</div>
+<!-- /.row (main row) -->
+</div><!-- /.container-fluid -->
+</section>
+<%- include("../partials/adminFooter"); -%>
