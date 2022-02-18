@@ -1,0 +1,129 @@
+<%- include("../partials/adminLayout"); -%>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><%=numberOfEvents %></h3>
+
+                <p>Created Events</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="/admins/viewcreatedEvents" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3><%=numberOfUsers%></h3>
+
+                <p>User Registrations</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+
+
+        <!-- Main row -->
+        <div class="row">
+          <div id="carouselExampleControls" class="carousel slide text-center" data-ride="carousel" data-pause="hover">
+            <a class="arrowbtn btn btn-info mb-4 mr-3" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="arrowbtn btn btn-info mb-4" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+            <div class="carousel-inner">
+
+                  <%allEvents.forEach((events,i)=>{%>
+                    <% if(i==0){%>
+                      <div class="carousel-item active"><%}else{ %>
+                        <div class="carousel-item"> <%}%>
+
+                <div class="row">
+
+               <%events.forEach((event)=>{%>
+                     <div class="col-md-4 col-sm-6">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+
+                      <div class="card-body">
+                    <%    if(!(event.isActive)){%>
+                          <p class="badge bg-danger" > Hidden.</p>
+                        <%}%>
+
+                        <h3 class="card-title pricing-card-title"><b><%=event.title%></b></h3>
+                        <% if(event.description.length > 90){ %>
+                            <p><%=event.description.substring(0,90) + "..." %></p>
+                        <%}else{%>
+                            <p> <%=event.description %> </p>
+                      <%  }%>
+
+                        <p class="badge bg-secondary" >from: <%=event.location %>.</p>
+<a href="<%='/admins/showEvent/'+ event._id %>"  class="w-100 btn btn-lg btn-outline-primary">Read more</a>                      </div>
+                    </div>
+                    </div>
+                      <%});%>
+
+
+                </div>
+                  </div>
+                  <%});%>
+
+
+
+            </div>
+              </div>
+
+
+        </div>
+          <!-- Left col -->
+          <section class="col-lg-7 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+<!--
+
+
+
+            <!-- /.card -->
+          </section>
+          <!-- /.Left col -->
+          <!-- right col (We are only adding the ID to make the widgets sortable)-->
+
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+<%- include("../partials/adminFooter"); -%>

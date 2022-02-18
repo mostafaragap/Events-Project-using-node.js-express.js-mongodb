@@ -1,0 +1,21 @@
+
+<%if(locals.message && locals.message != ""){%>
+  <div class="error2 alert alert-danger"  id="alllerts">
+    <p class=""><%=message%>&nbsp;<i class="fas fa-check-circle"></i> </p>
+ </div>
+  <%}%>
+
+  <%if(locals.error && locals.error != ""){%>
+     <div class="error alert alert-danger">
+      <p class=""><%=error%> </p>
+   </div>
+    <%}%>
+
+
+
+      <%if(locals.errors && locals.errors !=""){%>
+          <% errors.forEach((err)=>{%>
+            <div class="error alert alert-danger">
+              <p class="">- <%=err.msg%> </p>
+           </div>
+          <%});}%>

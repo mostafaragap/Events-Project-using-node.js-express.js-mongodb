@@ -1,0 +1,49 @@
+
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+<div class="container cardsSection">
+  <h1 class="display-4">Sign Up from here:</h1><hr />
+<%- include("../partials/flashMessages"); -%>
+
+
+
+
+  <form  action="/users/signUp" method="post">
+
+    <div class="row form-group" style="font-size:1.5rem">
+      <div class="col-md-6">
+        <label for="">First Name:</label>
+    <input name="firstName" type="text" class="form-control " aria-describedby="basic-addon1">
+      </div>
+      <div class="col-md-6">
+
+            <label for="">Last Name:</label>
+          <input name="lastName" type="text" class="form-control" aria-describedby="basic-addon1">
+      </div>
+      <div class="col-md-6">
+        <label for="">Email:</label>
+        <input name="email" type="text"  class="form-control" aria-describedby="basic-addon1">
+      </div>
+      <div class="col-md-6">
+        <label for="">City:</label>
+        <input name="city" type="text"  class="form-control" aria-describedby="basic-addon1">
+      </div>
+      <div class="col-md-6">
+        <label for="">Password:</label>
+        <input name="password" type="password"  class="form-control" aria-describedby="basic-addon1">
+      </div>
+      <div class="col-md-6">
+        <label for="">Confirm Password:</label>
+        <input name="confirmPassword" type="password"  class="form-control" aria-describedby="basic-addon1">
+      </div>
+
+    </div>
+<div class="text-center">
+      <button class="btn btn-primary btn-lg" type="submit" name="button">Sign Up</button>
+</div>
+
+  </form>
+</div>
+
+
+<%- include("../partials/footer"); -%>

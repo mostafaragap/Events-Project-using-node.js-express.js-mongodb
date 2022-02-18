@@ -1,0 +1,28 @@
+
+<%- include("../partials/adminLayout"); -%>
+<div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
+    <div class="col-md-6 px-0">
+      <h1 class="display-4 fst-italic text-capitalize"><%=event.title %></h1><p>Created By :<a style="color:white ; font-size:1.5rem" href="/admins/showUserProfile/<%=userinfo.id%>"><%=userinfo.firstName + ' ' + userinfo.lastName%></a> </p>
+        <hr>
+
+      <p class="lead my-3"><%=event.description %></p>
+    <h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-info"><%=event.date.toDateString() %></i></h4>
+<%if((event.isActive)){%>
+  <button class="btn btn-outline-primary  btn-lg" onclick="hideFromtimeline()" id="hideEvent" data-id="<%= event.id%>" style="margin-right:10px; ">Hide From Timeline</button>
+
+<%}else{%>
+  <button class="btn btn-outline-primary  btn-lg" onclick="unhideFromtimeline()" id="unhideEvent" data-id="<%= event.id%>" style="margin-right:10px; ">Show in Timeline</button>
+
+<%}%>
+
+      <a href="/events/delete/<%=event._id%>" class="btn btn-outline-danger btn-lg">Delete</a>
+
+
+
+
+
+    </div>
+  </div>
+
+
+  <%- include("../partials/adminFooter"); -%>

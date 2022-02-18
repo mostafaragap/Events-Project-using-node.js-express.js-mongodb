@@ -1,0 +1,32 @@
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+
+<div class="container cardsSection">
+  <h1 class="display-4">Edit from here:</h1><hr />
+
+<%- include("../partials/flashMessages"); -%>
+
+  <form action="/events/update" method="post">
+    <input type="hidden" name="eventId" value="<%=event._id %>"></input>
+    <input type="hidden" name="created_At" value="<%=event.created_At %>"></input>
+    <div class="form-group" style="font-size:1.5rem">
+        <label for="">Title</label>
+    <input name="title" type="text" class="form-control " value="<%=event.title%>" aria-describedby="basic-addon1">
+      <label for="">Post</label>
+    <textarea name="description" class="form-control" rows="5" cols="100" ><%=event.description%></textarea>
+
+    <label for="">Location</label>
+  <input name="location" type="text" class="form-control" value="<%=event.location%>" aria-describedby="basic-addon1">
+
+  <label for="">Date</label>
+  <input name="date" type="date" id="date" class="form-control" value="<%=eventDate%>" >
+    </div>
+
+
+    <button class="btn btn-primary" type="submit" name="button">Edit</button>
+
+
+  </form>
+</div>
+
+<%- include("../partials/footer"); -%>

@@ -1,0 +1,110 @@
+<%if(!(user.isAdmin)){%>
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+<%}else{%>
+  <%- include("../partials/adminLayout"); -%>
+
+  <%- include("../partials/flashMessages"); -%>
+<%}%>
+
+
+
+<div class="container mt-4">
+<div class="row gutters">
+<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+<div class="card h-100">
+	<div class="card-body">
+		<div class="account-settings">
+			<div class="user-profile">
+				<div class="user-avatar">
+          <%if(user.avatar){%>
+          <img src="/images/<%=user.avatar %>" title="" alt="" style=" width:15rem">
+        <%  }else {%>
+                <img src="/images/profile.png" title="" alt="" style=" width:15rem">
+          <%}%>
+				</div>
+				<h5 class="user-name"><%=user.firstName +" " + user.lastName  %></h5>
+				<h6 class="user-email"><%=user.email %></h6>
+			</div>
+			<div class="about">
+				<h5>About</h5>
+				<%if(!(user.isAdmin)){%>
+					<p>Event management User.</p>
+				<%}else{%>
+						<p>Event management Admin.</p>
+				<%}%>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+  <form class="" action="/users/editProfile" method="post">
+    <div class="card h-100">
+    	<div class="card-body">
+    		<div class="row gutters">
+    			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    				<h6 class="mb-2 text-primary">Personal Details</h6>
+    			</div>
+    			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+    				<div class="form-group">
+    					<label for="fullName">First Name</label>
+    					<input type="text" name="firstName" class="form-control" id="fullName" value="<%=user.firstName%>" >
+    				</div>
+    			</div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+            <div class="form-group">
+              <label for="fullName">Last Name</label>
+              <input type="text" name="lastName" class="form-control" id="fullName" value="<%=user.lastName%>" >
+            </div>
+          </div>
+    			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+    				<div class="form-group">
+    					<label for="eMail">Email</label>
+    					<input type="email" name="email" class="form-control" id="eMail" value="<%=user.email%>">
+    				</div>
+    			</div>
+    			<!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+    				<div class="form-group">
+    					<label for="phone">Phone</label>
+    					<input type="text" class="form-control" id="phone" placeholder="Enter phone number">
+    				</div>
+    			</div> -->
+
+    		</div>
+    		<div class="row gutters">
+    			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    				<h6 class="mt-3 mb-2 text-primary">Address</h6>
+    			</div>
+
+    			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+    				<div class="form-group">
+    					<label for="ciTy">City</label>
+    					<input type="name" name="city" class="form-control" id="ciTy" value="<%=user.city%>">
+    				</div>
+    			</div>
+
+
+    		</div>
+    		<div class="row gutters">
+    			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    				<div class="text-right">
+    					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
+    					<button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+  </form>
+
+</div>
+</div>
+</div>
+
+<%if(!(user.isAdmin)){%>
+<%- include("../partials/footer"); -%>
+<%}else{%>
+    <%- include("../partials/adminFooter"); -%>
+<%}%>
