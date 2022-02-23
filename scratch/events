@@ -1,0 +1,11 @@
+{
+  title: 'fgfgpolkfg',
+  description: 'fgfgpolkfgfgfgpolkfg',
+  location: 'cairo',
+  date: 2022-03-16T00:00:00.000Z,
+  created_At: 2022-02-21T01:25:08.973Z,
+  author: '62112045ca1f6de02321e0dc',
+  isActive: true,
+  skills: [ 'Algorithms', 'Analytical Skills' ],
+  _id: new ObjectId("6212e9f4f730bb9259a1cd0a")
+}

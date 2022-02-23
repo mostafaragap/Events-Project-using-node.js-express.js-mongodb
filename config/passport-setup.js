@@ -37,7 +37,7 @@ passport.use('local.signup', new localStrategy({
                 return done(null, false, req.flash('error', 'Email already used'));
             }
 
-            if (!user) {
+            if (!user && req.body.typeSelect === 'Publisher') {
                 //create user
                 let newUser = new User();
                 newUser.firstName = req.body.firstName;
@@ -47,8 +47,10 @@ passport.use('local.signup', new localStrategy({
                       newUser.password= newUser.hashPassword(req.body.password);
                       newUser.avatar='profile.png';
                       newUser.isAdmin = false ;
-                        newUser.created_At = Date.now() ;
-                        newUser.isActive= true ;
+                      newUser.created_At = Date.now() ;
+                      newUser.isActive= true ;
+                      newUser.isSpeaker= false ;
+
                 newUser.save ((err,user)=> {
                     if(!err) {
                         return done(null, user, req.flash('success', 'User Added'));
@@ -56,6 +58,26 @@ passport.use('local.signup', new localStrategy({
                         console.log(err);
                     }
                 });
+            }else{
+              let newUser = new User();
+              newUser.firstName = req.body.firstName;
+                    newUser.lastName =req.body.lastName ;
+                    newUser.email=req.body.email ;
+                    newUser.city= req.body.city  ;
+                    newUser.password= newUser.hashPassword(req.body.password);
+                    newUser.avatar='profile.png';
+                    newUser.isAdmin = false ;
+                    newUser.created_At = Date.now() ;
+                    newUser.isActive= true ;
+                    newUser.isSpeaker= true ;
+
+              newUser.save ((err,user)=> {
+                  if(!err) {
+                      return done(null, user, req.flash('success', 'User Added'));
+                  } else {
+                      console.log(err);
+                  }
+              });
             }
         });
     }

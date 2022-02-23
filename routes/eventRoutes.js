@@ -1,7 +1,9 @@
 //jshint esversion:6
 const Events = require("../models/Event");
 const express =require("express");
-
+const Skills = require("../models/skills");
+const User = require("../models/user");
+const Notification = require("../models/notifications");
 const moment = require('moment');
 moment().format();
 //middleware to check if user is authenticated
@@ -35,52 +37,59 @@ router.get("/showMyEvents" ,isAuthenticated, (req,res)=>
   });
 
 });
-//route to home events
-router.get("/:pageNo?",nocache, (req,res)=>
-{
-  let pageNo=1;
-  if(req.params.pageNo){
-    pageNo = parseInt(req.params.pageNo);
-  }
-  if(req.params.pageNo == 0)
-  {
-    pageNo=1;
-  }
-  let q= {
-    skip:6*(pageNo - 1),
-    limit:6
-  };
-  //find total docs
-  let totalDocs = 0 ;
-  Events.countDocuments({}, function (err, count) {
-    if (err){
-        console.log(err); }
-        else {
-      totalDocs = parseInt(count);
-      Events.find({isActive:true},{},q,(err,results)=>
-    {
-      if(!err)
-      {
-      let chunk=[];
-      let chunckSize = 3 ;
-      for(let i=0 ; i<results.length ; i+=chunckSize){
-        chunk.push(results.slice(i,chunckSize+i));
-      }
-        res.render('event/index' , {allEvents:chunk , message : req.flash("info") , title:"Home Page" , total:parseInt(totalDocs),pageNo:pageNo});
 
-      }else{
-        console.log(err);
-      }
-    }).sort({created_At :1 });
-    }});
+//event // ID:
+let eventId  ;
+
+//add Speakers
+router.post("/inviteSpeaker" , (req,res)=>{
+ let eventID = req.body.eventId ;
+ let speakerId = req.body.speakerId ;
+ let skills = req.body.skillsneeded;
+ console.log(req.body.action);
+ if(req.body.action == "add"){
+  const notification = new Notification({
+    event_id:eventID ,
+    speaker_id:speakerId ,
+    type:'invite'
+  });
+  notification.save();
+   Events.findOneAndUpdate({_id:eventID} , {$push : {speakersAdded :speakerId }}  , (err , updateduser)=>
+ {
+   if(!err) {
+
+       res.redirect("/events/speakers/showSpeakers/"+skills);
+
+   } else {
+
+   }
+ });
+}else{
+  Events.findOneAndUpdate({_id:eventID} , {$pull : {speakersAdded :speakerId }}  , (err , updateduser)=>
+{
+  if(!err) {
+
+      res.redirect("/events/speakers/showSpeakers/"+skills);
+
+  } else {
+
+  }
+});
+}
+
+
 
 });
+
+
+
 
 //create new event
-router.get("/create/event" , nocache,isAuthenticated ,(req,res) =>{
+router.get("/create/event" ,isAuthenticated ,(req,res) =>{
 
-  res.render("event/create",{ errors :req.flash("errors") , title:"Create Page"});
+  res.render("event/create",{ errors :req.flash("errors") , skills:Skills,title:"Create Page"});
 });
+
 
 
 //save createed new event
@@ -97,9 +106,12 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
   {
     req.flash("errors",errors.array());
   //  console.log(req.flash("errors"));
-  res.redirect("/events/create");
+  res.redirect("/events/create/event");
 
   }else{
+  const skillsNedded = req.body.skills ;
+
+
     const newEvent = new Events(
       {
       title  :req.body.title   ,
@@ -107,10 +119,26 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
       location :req.body.location  ,
       date :req.body.date  ,
       created_At: Date.now() ,
-      author:req.user.id
+      author:req.user.id ,
+      skills:req.body.skills
       }
     ) ;
+  if(req.body.skills.length > 1){
+    newEvent.save((err)=>{
+    if(!err)
+    {
+      //req.flash("info", "your Event is created succesfully");
+      eventId = newEvent.id ;
 
+      res.redirect("/events/speakers/showSpeakers/" + skillsNedded );
+
+    //  console.log("Okkkkkkkkkk");
+    }else
+    {
+      console.log(err);
+    }
+    });
+  }else{
     newEvent.save((err)=>{
     if(!err)
     {
@@ -123,6 +151,8 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
       console.log(err);
     }
     });
+  }
+
   }
 
 });
@@ -214,6 +244,75 @@ router.post("/deleteevent" , (req,res)=>{
       console.log(err);
     }
   });
+});
+
+//add speakers
+
+router.get("/speakers/showSpeakers/:skills?", (req,res)=>{
+  let skills = req.params.skills ;
+  //var array = JSON.parse("[" + skills + "]");
+  Events.findOne({_id:eventId} , (err,event)=>{
+    if(!err)
+    {
+      console.log(event);
+      var array = skills.split(",").map(String);
+
+      User.find( {isSpeaker:true ,  skills: { $all: array } }  , (err , users)=>{
+        if(!err){
+
+      res.render("event/showSpeakers" , {speakers : users ,eventId :eventId ,event:event , skillsneeded:array,  title:"Speakers" } );
+        }
+      });
+    }
+  });
+
+
+
+});
+
+
+
+
+
+//route to home events
+router.get("/:pageNo?",nocache, (req,res)=>
+{
+  let pageNo=1;
+  if(req.params.pageNo){
+    pageNo = parseInt(req.params.pageNo);
+  }
+  if(req.params.pageNo == 0)
+  {
+    pageNo=1;
+  }
+  let q= {
+    skip:6*(pageNo - 1),
+    limit:6
+  };
+  //find total docs
+  let totalDocs = 0 ;
+  Events.countDocuments({}, function (err, count) {
+    if (err){
+        console.log(err); }
+        else {
+      totalDocs = parseInt(count);
+      Events.find({isActive:true},{},q,(err,results)=>
+    {
+      if(!err)
+      {
+      let chunk=[];
+      let chunckSize = 3 ;
+      for(let i=0 ; i<results.length ; i+=chunckSize){
+        chunk.push(results.slice(i,chunckSize+i));
+      }
+        res.render('event/index' , {allEvents:chunk , message : req.flash("info") , title:"Home Page" , total:parseInt(totalDocs),pageNo:pageNo});
+
+      }else{
+        console.log(err);
+      }
+    }).sort({created_At :-1 });
+    }});
+
 });
 
 

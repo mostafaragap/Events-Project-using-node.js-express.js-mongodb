@@ -4,6 +4,8 @@ const app=express();
 
 //connect to mongodb
 const db = require('./config/database');
+const Notifications = require("./models/notifications");
+
 ///session and flash
 const session = require('express-session');
  const flash = require('connect-flash');
@@ -36,6 +38,9 @@ app.get("/", (req,res)=>
 {
   res.redirect("/events");
 });
+
+
+
 
 //bring events routes
 const events = require('./routes/eventRoutes');

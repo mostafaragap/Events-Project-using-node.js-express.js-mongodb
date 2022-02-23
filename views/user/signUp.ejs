@@ -11,6 +11,15 @@
   <form  action="/users/signUp" method="post">
 
     <div class="row form-group" style="font-size:1.5rem">
+        <div class="col-md-8" >
+          <label for="">Select Who you are</label>
+          <select id='userTyps'  class="form-select" name="typeSelect" aria-label="Default select example">
+      <%type.forEach((item)=>{%>
+          <option><%=item%></option>
+      <%})%>
+      </select>
+     </div>
+    
       <div class="col-md-6">
         <label for="">First Name:</label>
     <input name="firstName" type="text" class="form-control " aria-describedby="basic-addon1">
@@ -43,6 +52,7 @@
 </div>
 
   </form>
+
 </div>
 
 

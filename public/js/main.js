@@ -1,4 +1,5 @@
 //jshint esversion:6
+
  var element = document.getElementById("alllerts");
  if(element !== null)
  {
@@ -8,6 +9,7 @@
  function myGreeting() {
  element.style.display="none";
  }
+
 
  var l_Events =document.getElementById("latestEvents") ;
 
@@ -115,3 +117,86 @@ function unhideFromtimeline() {
     });
 
 }
+
+//function to add skills
+  const addedSkills = [] ;
+var select = document.getElementById('selecting');
+var skills = document.getElementsByClassName('.Speakerskills');
+function addskills() {
+  let skillValue = select.options[select.selectedIndex].value ;
+    let skill = select.options[select.selectedIndex].text;
+    console.log(skill);
+    axios.patch('/users/addSkill/'+ skill)
+    .then( (res)=> {
+        console.log(res.data);
+
+       if((res.data) !='Exist skill'){
+          addedSkills.push(skill);
+          const para = document.createElement("span");
+          para.classList.add("badge");
+          para.classList.add("bg-secondary");
+          para.style.marginLeft = "2px";
+             addedSkills.forEach((item, i) => {
+             para.innerHTML = skill;
+             document.getElementById("addedSkil").appendChild(para);
+               window.location.href = '/users/profile';
+
+           });
+        }else {
+           window.location.href = '/users/profile';
+        }
+
+    })
+    .catch( (err)=> {
+
+        console.log(err);
+    });
+
+}
+
+
+//delete skills
+
+var quer = document.querySelectorAll("#skillsArayy") ;
+quer.forEach((name)=>{
+  name.addEventListener('click' ,()=>{
+    axios.patch('/users/deleteSkill/'+name.innerText).then((res)=>{
+         window.location.href = '/users/profile';
+
+    })
+    .catch((err)=>{
+      console.log(err);
+    });
+
+
+  });
+});
+
+//disable a button when select speakers
+// let speakerbtn = document.getElementById('inviteSpeaker');
+// speakerbtn.addEventListener('click', ()=>{
+//   speakerbtn.disabled = true ;
+// });
+
+function inviteSpeaker() {
+    let btn = document.getElementById('inviteSpeaker');
+    let eventId = btn.getAttribute('data-id');
+    let speakerId = document.getElementById('speakerid').value;
+      let skills = document.getElementById('skillslist').value;
+console.log(eventId);
+console.log(speakerId);
+console.log(skills);
+    axios({
+    method: 'post',
+    url: '/events/inviteSpeaker',
+    data: {
+      eventId:eventId ,
+      speakerId: speakerId,
+      skillsneeded:skills
+    }
+  });
+}
+
+
+
+///selected

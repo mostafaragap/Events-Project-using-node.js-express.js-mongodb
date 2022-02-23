@@ -30,6 +30,15 @@ const eventSchema = new mongoose.Schema(
    isActive:{
      type:Boolean ,
      default:true
+   },
+   skills:{
+     type:[String] ,
+     default:[]
+   } ,
+   speakersAdded:
+   {
+     type:[String],
+     default:[]
    }
  }
 );

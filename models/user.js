@@ -41,6 +41,14 @@ const userSchema = new mongoose.Schema(
    isActive :{
      type:Boolean  ,
      required: true
+   },
+   isSpeaker :{
+     type:Boolean  ,
+     Default: false
+   },
+   skills :{
+     type:[String]  
+    // required: true
    }
 
   }

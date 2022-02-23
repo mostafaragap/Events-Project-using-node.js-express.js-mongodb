@@ -25,7 +25,17 @@
 
   <label for="">Date</label>
   <input name="date" type="date" id="date" class="form-control" aria-describedby="basic-addon1">
+  <label for="">Event About (optional)</label>
+  <select multiple="multiple form-select" name="skills">
+    <%skills.forEach((skill)=>{%>
+      <option><%=skill%></option>
+    <%});%>
+
+</select>
     </div>
+
+
+<hr/>
 
 
     <button class="btn btn-primary" type="submit" name="button">Publish</button>

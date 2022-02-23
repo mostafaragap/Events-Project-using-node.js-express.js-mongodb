@@ -2,14 +2,10 @@
 <%- include("../partials/header"); -%>
 <%- include("../partials/navbar"); -%>
 <%}else{%>
-  <%- include("../partials/adminLayout"); -%>
+<%- include("../partials/adminLayout"); -%>
 
-  <%- include("../partials/flashMessages"); -%>
+<%- include("../partials/flashMessages"); -%>
 <%}%>
-
-
-
-
 
 
 
@@ -19,86 +15,90 @@
       <div class="col-lg-6">
         <div class="about-text go-to">
           <h3 class="dark-color">About Me</h3>
-          <%    if(!(user.isAdmin)){%>
-          <h6 class="theme-color lead">Event Publisher in events website</h6>
-          <p>I <mark>Event Publisher </mark> in events website </p>
-          <%}else{%>
-          <h6 class="theme-color lead">Event Admin in events website</h6>
-          <p>I <mark>Event Admin </mark> in events website </p>
-          <%}%>
+
+          <%    if(!(user.isAdmin) && !(user.isSpeaker)){%>
+<h6 class="theme-color lead">Event Publisher in events website</h6>
+<p>I <mark>Event Publisher </mark> in events website </p>
+<%}else if((user.isAdmin)){%>
+<h6 class="theme-color lead">Event Admin in events website</h6>
+<p>I <mark>Event Admin </mark> in events website </p>
+<%}else{%>
+  <h6 class="theme-color lead">Event Speaker in events website</h6>
+  <p>I <mark>Event Speaker </mark> in events website </p>
+<%}%>
 
                               <div class="row about-list">
                                   <div class="col-md-6">
                                       <div class="media">
                                           <label>Name</label>
                                           <p><%=user.firstName+" " + user.lastName %></p>
-        </div>
-        <div class="media">
-          <label>Age</label>
-          <p>24 Yr</p>
-        </div>
-        <div class="media">
-          <label>Residence</label>
-          <p><%=user.city%></p>
-        </div>
-        <div class="media">
-          <label>Address</label>
-          <p>California, USA</p>
-        </div>
+</div>
+<div class="media">
+  <label>Age</label>
+  <p>24 Yr</p>
+</div>
+<div class="media">
+  <label>Residence</label>
+  <p><%=user.city%></p>
+</div>
+<div class="media">
+  <label>Address</label>
+  <p>California, USA</p>
+</div>
+</div>
+<div class="col-md-6">
+  <div class="media">
+    <label>E-mail</label>
+    <p><%=user.email%></p>
+  </div>
+  <div class="media">
+    <label>Phone</label>
+    <p>820-885-3321</p>
+  </div>
+  <div class="media">
+    <label>Skype</label>
+    <p>skype.0404</p>
+  </div>
+  <div class="media">
+    <label>publish</label>
+    <p>Available</p>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6 text-center">
+  <div class="about-avatar">
+    <%if(user.avatar){%>
+    <img src="/images/<%=user.avatar %>" title="" alt="" style=" width:20rem">
+    <%  }else {%>
+    <img src="/images/profile.png" title="" alt="" style=" width:20rem">
+    <%}%>
+
+          <%    if(!(user.isAdmin)){%>
+    <form action="/users/uploadAvatar" method="post" enctype="multipart/form-data">
+      <div style="width:15rem; margin:0 0 0  30%   " class="form-outline mt-2">
+        <input type="file" name="avatar" class="form-control" id="customFile" />
       </div>
-      <div class="col-md-6">
-        <div class="media">
-          <label>E-mail</label>
-          <p><%=user.email%></p>
-        </div>
-        <div class="media">
-          <label>Phone</label>
-          <p>820-885-3321</p>
-        </div>
-        <div class="media">
-          <label>Skype</label>
-          <p>skype.0404</p>
-        </div>
-        <div class="media">
-          <label>publish</label>
-          <p>Available</p>
-        </div>
+      <button style="margin:0 0 1rem 0" class="btn btn-lg btn-outline-primary" type="submit" name="button">Change Photo</button>
+    </form>
+
+    <%}else{%>
+
+    <form action="/users/uploadAvatar" method="post" enctype="multipart/form-data">
+      <label for="exampleFormControlFile1">change your avatar</label>
+      <div class="form-group" style="margin-left:30%">
+
+
+        <input type="file" name="avatar" class="form-control-file" id="customFile">
       </div>
-    </div>
-  </div>
-  </div>
-  <div class="col-lg-6 text-center">
-    <div class="about-avatar">
-      <%if(user.avatar){%>
-      <img src="/images/<%=user.avatar %>" title="" alt="" style=" width:20rem">
-      <%  }else {%>
-      <img src="/images/profile.png" title="" alt="" style=" width:20rem">
-      <%}%>
 
-                            <%    if(!(user.isAdmin)){%>
-      <form action="/users/uploadAvatar" method="post" enctype="multipart/form-data">
-        <div style="width:15rem; margin:0 0 0  30%   " class="form-outline mt-2">
-          <input type="file" name="avatar" class="form-control" id="customFile" />
-        </div>
-        <button style="margin:0 0 1rem 0" class="btn btn-lg btn-outline-primary" type="submit" name="button">Change Photo</button>
-      </form>
+      <button style="margin:0 0 1rem 0" class="btn btn-lg btn-outline-primary" type="submit" name="button">Change Photo</button>
 
-      <%}else{%>
+    </form>
+    <a href="/users/editProfile" class="btn btn-lg btn-outline-info">Edit Profile</a>
 
-      <form action="/users/uploadAvatar" method="post" enctype="multipart/form-data">
-        <label for="exampleFormControlFile1">change your avatar</label>
-        <div class="form-group" style="margin-left:30%">
-
-
-    <input type="file" name="avatar" class="form-control-file" id="customFile">
-  </div>
-
-        <button style="margin:0 0 1rem 0" class="btn btn-lg btn-outline-primary" type="submit" name="button">Change Photo</button>
-
-      </form>
-        <a href="/users/editProfile" class="btn btn-lg btn-outline-info">Edit Profile</a>
-
-      <%}%>
+    <%}%>
 
 
 
@@ -109,18 +109,18 @@
                       </div>
                   </div>
 
-                  <%    if(!(user.isAdmin)){%>
-      <div class="counter">
-        <div class="row">
-          <div class="col-6 col-lg-3">
-            <div class="count-data text-center">
-              <%if(events > 1 ) {%>
-              <h6 class="count h2" data-to="500" data-speed="500">+<%=events%></h6>
-              <p class="m-0px font-w-600">Events</p>
-              <%}else{%>
-              <h6 class="count h2" data-to="500" data-speed="500">---</h6>
-              <p class="m-0px font-w-600">Events</p>
-              <%}%>
+                  <%if(!(user.isAdmin) &&!(user.isSpeaker)){%>
+    <div class="counter">
+      <div class="row">
+        <div class="col-6 col-lg-3">
+          <div class="count-data text-center">
+            <%if(events > 1 ) {%>
+            <h6 class="count h2" data-to="500" data-speed="500">+<%=events%></h6>
+            <p class="m-0px font-w-600">Events</p>
+            <%}else{%>
+            <h6 class="count h2" data-to="500" data-speed="500">---</h6>
+            <p class="m-0px font-w-600">Events</p>
+            <%}%>
 
                                 </div>
                             </div>
@@ -144,11 +144,45 @@
                             </div>
                         </div>
                     </div>
+                      <%}else if(!(user.isAdmin) &&(user.isSpeaker)){%>
+            <div id="counter" class="counter">
+
+              <h3>Skills</h3>
+
+              <%if(exist && exist != ""){%>
+                 <div id="errormessage" class="error alert alert-danger">
+                  <p ><%=exist%> </p>
+               </div>
+                <%}%>
+              <div class="row">
+                <div class="col-md-4 mb-3">
+<label for="">Add your skiils</label>
+                  <select id="selecting" class="col-md-3form-select form-select-sm" aria-label=".form-select-sm example">
+
+      <% skills.forEach((item, i) => {%>
+          <option><%=item%></option>
+       <%});%>
+       </select>
+       <button class="btn btn-primary" onclick="addskills()" id="addSkills">Add</button>
+                </div>
+              </div>
+              <div style="width:50rem" class="Speakerskills">
+                 <%user.skills.forEach((item, i) =>{%>
+                <span class="badge bg-secondary" id="skillsArayy"> <%=item%><i class="deletesign fas fa-times"></i></span>
+                 <%});%>
+                 <span id="addedSkil">
+                <span class="singleSkill"> </span>
+                 </span>
+
+              </div>
+
+
+           </div>
                       <%}%>
 
 
-            </div>
-</section>
+                  </div>
+                  </section>
 
 
 
@@ -156,8 +190,8 @@
 
 
 
-<%if(!(user.isAdmin)){%>
-<%- include("../partials/footer"); -%>
-<%}else{%>
-    <%- include("../partials/adminFooter"); -%>
-<%}%>
+                  <%if(!(user.isAdmin)){%>
+                  <%- include("../partials/footer"); -%>
+                  <%}else{%>
+                  <%- include("../partials/adminFooter"); -%>
+                  <%}%>

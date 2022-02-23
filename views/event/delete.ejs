@@ -1,9 +1,12 @@
 <%if(!(user.isAdmin)){%>
-  <%- include("../partials/header"); -%>
+<%- include("../partials/header"); -%>
 <%- include("../partials/navbar"); -%>
+<%}else{%>
+<%- include("../partials/adminLayout"); -%>
+
+<%- include("../partials/flashMessages"); -%>
 <%}%>
 
-<%- include("../partials/adminLayout"); -%>
 
 <div class="container">
 
@@ -24,9 +27,11 @@
 
 </div>
 </div>
+</div>
 
 
-<%if(!(user.isAdmin)){%>
-<%- include("../partials/footer"); -%>
-<%}%>
-<%- include("../partials/adminFooter"); -%>
+                  <%if(!(user.isAdmin)){%>
+                  <%- include("../partials/footer"); -%>
+                  <%}else{%>
+                  <%- include("../partials/adminFooter"); -%>
+                  <%}%>
