@@ -45,40 +45,19 @@
 
        </ul>
   <%}else{%>
-    
+
     <ul class="navbar-nav">
       <li class="nav-item dropdown">
 
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link" href="/users/notifications" id="navbarDropdown" >
             <i class="notification fa fa-bell">
-              <span class="notificationbadge badge bg-danger">14</span>
+              <span class="notificationbadge badge bg-danger"><%=numberofnotifications%></span>
             </i>
-
           </a>
 
-
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li id="latestEvents">
-                <a class="dropdown-item" href="/users/editProfile">Setting</a>
-              </li>
-              <li>
-                  <a class="dropdown-item" href="/users/profile">View Profile</a>
-
-              </li>
-
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
-            </ul>
           </li>
 
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li id="latestEvents">
-              <a class="dropdown-item" href="/users/editProfile">Setting</a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="/users/profile">View Profile</a>
-            </li>
-          </ul>
+
 
     </ul>
 

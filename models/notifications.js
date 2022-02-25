@@ -7,17 +7,38 @@ const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema(
   {
-  event_id : {
+  senderId : {
     type:String ,
     required: true
   } ,
-  speaker_id : {
+  sendTo: {
+    type:String
+  },
+  senderImg : {
     type:String ,
     required: true
   } ,
-   type:{
+   senderName:{
      type:String ,
      required: true
+   } ,
+   eventId:{
+     type:String
+   } ,
+   eventTitle:{
+     type:String
+   } ,
+   eventDate:
+   {
+     type:Date
+   },
+   type :{
+     type:String ,
+     required: true
+   },
+   created_At:{
+     type:Date ,
+     required:true
    }
  }
 );

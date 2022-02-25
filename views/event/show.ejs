@@ -3,24 +3,74 @@
 
 <div class="container">
 
-  <div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
-      <div class="col-md-6 px-0">
-        <h1 class="display-4 fst-italic text-capitalize"><%=event.title %></h1>
-          <hr>
+  <%if(invitedSpeaker === 'notSpeaker'){%>
+    <div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
+        <div class="col-md-9 px-0">
+          <h1 class="display-4 fst-italic text-capitalize"> <%=event.title %></h1>
+            <hr>
 
-        <p class="lead my-3"><%=event.description %></p>
-      <h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-info"><%=event.date.toDateString() %></i></h4>
-      <%if(user && user.id === event.author){%>
-        <a href="/events/edit/<%=event._id%>" class="btn btn-outline-primary  btn-lg" style="margin-right:10px;">Edit</a>
+          <p class="lead my-3"><%=event.description %></p>
+        <h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-info"><%=event.date.toDateString() %></i></h4>
+        <%if(user && user.id === event.author){%>
+          <a href="/events/edit/<%=event._id%>" class="btn btn-outline-primary  btn-lg" style="margin-right:10px;">Edit</a>
 
-        <a href="/events/delete/<%=event._id%>" class="btn btn-outline-danger btn-lg">Delete</a>
-      <%}%>
-
-
+          <a href="/events/delete/<%=event._id%>" class="btn btn-outline-danger btn-lg">Delete</a>
+        <%}%>
 
 
+
+
+        </div>
       </div>
-    </div>
+  <%}else if(invitedSpeaker === 'invited') {%>
+
+    <div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
+        <div class="col-md-9 px-0">
+          <div class="alert alert-secondary col-lg-6 col" role="alert">
+              <h4>You are invited to :</h4>
+              </div>
+          <h1 class="display-4 fst-italic text-capitalize"> <%= ' '+ event.title %></h1>
+            <hr>
+
+          <p class="lead my-3"><%=event.description %></p>
+        <h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-info"><%=event.date.toDateString() %></i></h4>
+<form class="" action="/users/speakersAction" method="post">
+ <input type="hidden" name="author" value="<%=event.author%>">
+ <input type="hidden" name="eventId" value="<%=event.id%>">
+
+  <button class="btn btn-outline-primary  btn-lg" type="submit" style="margin-right:10px;" value="<%=notificationid%>" name="accept">Accept</button>
+  <button class="btn btn-outline-danger btn-lg" type="submit"  value="<%=notificationid%>" name="discard">Discard</button>
+
+</form>
+
+
+
+
+
+
+        </div>
+      </div>
+
+
+  <%}else{%>
+    <div class="p-4 p-md-5 mb-4 mt-5 text-white rounded bg-dark">
+        <div class="col-md-9 px-0">
+          <div class="alert alert-secondary col-lg-6 col" role="alert">
+              <h4>You are the speaker of this event :</h4>
+              </div>
+          <h1 class="display-4 fst-italic text-capitalize"><%=event.title %></h1>
+            <hr>
+
+          <p class="lead my-3"><%=event.description %></p>
+        <h4><i class="badge bg-secondary"><%=event.location %></i> <i class="badge bg-info"><%=event.date.toDateString() %></i></h4>
+
+
+
+
+        </div>
+      </div>
+  <%}%>
+
 
 
 </div>

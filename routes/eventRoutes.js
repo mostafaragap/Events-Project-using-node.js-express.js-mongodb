@@ -3,7 +3,9 @@ const Events = require("../models/Event");
 const express =require("express");
 const Skills = require("../models/skills");
 const User = require("../models/user");
-const Notification = require("../models/notifications");
+const Notifications = require("../models/notifications");
+const Meeting = require("../models/meeting");
+
 const moment = require('moment');
 moment().format();
 //middleware to check if user is authenticated
@@ -22,19 +24,33 @@ function nocache(req, res, next) {
   res.header('Pragma', 'no-cache');
   next();
 }
+
+
+
+const GetnumbersOfUsernotification = (uId) => {
+
+  return  Notifications.countDocuments({sendTo:uId}) ;
+};
+
 //show users Events
 //
 router.get("/showMyEvents" ,isAuthenticated, (req,res)=>
 {
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+    Events.find({author : req.user.id} , (err,result)=>{
+      if(!err)
+      {
 
-  Events.find({author : req.user.id} , (err,result)=>{
-    if(!err)
-    {
-      res.render('event/showMyEvents' , {events :result , title:"Show single Event" });
-    }else{
-      console.log(err);
-    }
-  });
+        res.render('event/showMyEvents' , {events :result ,numberofnotifications:response, title:"Show single Event" });
+      }else{
+        console.log(err);
+      }
+    });
+
+
+});
+
+
 
 });
 
@@ -44,14 +60,22 @@ let eventId  ;
 //add Speakers
 router.post("/inviteSpeaker" , (req,res)=>{
  let eventID = req.body.eventId ;
+ let eventTitle = req.body.eventTitle ;
+  let eventDate = req.body.eventDate ;
  let speakerId = req.body.speakerId ;
  let skills = req.body.skillsneeded;
  console.log(req.body.action);
  if(req.body.action == "add"){
-  const notification = new Notification({
-    event_id:eventID ,
-    speaker_id:speakerId ,
-    type:'invite'
+  const notification = new Notifications({
+    eventId:eventID ,
+    eventTitle: eventTitle  ,
+    eventDate:eventDate ,
+    senderId:req.user.id ,
+    senderName:req.user.firstName + ' ' + req.user.lastName ,
+    sendTo:speakerId ,
+    type:'invite' ,
+    senderImg: req.user.avatar,
+    created_At: Date.now()
   });
   notification.save();
    Events.findOneAndUpdate({_id:eventID} , {$push : {speakersAdded :speakerId }}  , (err , updateduser)=>
@@ -65,6 +89,12 @@ router.post("/inviteSpeaker" , (req,res)=>{
    }
  });
 }else{
+  Notifications.deleteOne({event_id:eventID ,sender:req.user.id ,sendTo :speakerId } , (err)=>{
+    if(!err){
+      console.log("notification deleted");
+    }
+  });
+
   Events.findOneAndUpdate({_id:eventID} , {$pull : {speakersAdded :speakerId }}  , (err , updateduser)=>
 {
   if(!err) {
@@ -77,8 +107,6 @@ router.post("/inviteSpeaker" , (req,res)=>{
 });
 }
 
-
-
 });
 
 
@@ -86,8 +114,18 @@ router.post("/inviteSpeaker" , (req,res)=>{
 
 //create new event
 router.get("/create/event" ,isAuthenticated ,(req,res) =>{
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+    Events.find({author : req.user.id} , (err,result)=>{
+      if(!err)
+      {
+          res.render("event/create",{ errors :req.flash("errors"),numberofnotifications:response , skills:Skills,title:"Create Page"});
+      }else{
+        console.log(err);
+      }
+    });
+});
 
-  res.render("event/create",{ errors :req.flash("errors") , skills:Skills,title:"Create Page"});
+
 });
 
 
@@ -123,7 +161,7 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
       skills:req.body.skills
       }
     ) ;
-  if(req.body.skills.length > 1){
+  if((req.body.skills)){
     newEvent.save((err)=>{
     if(!err)
     {
@@ -159,12 +197,22 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
 
 //edit page
 router.get("/edit/:id",nocache,isAuthenticated , (req,res) =>{
- id=req.params.id ;
- Events.findOne({_id:id} , (err , result)=>{
-   if(!err){
-     res.render("event/edit",{event :result,eventDate :moment(result.date).format('YYYY-MM-DD') ,errors :req.flash("editErrors") , title:"Edit"});
-   }else{console.log(err);}
- });
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+    Events.find({author : req.user.id} , (err,result)=>{
+      if(!err)
+      {
+        id=req.params.id ;
+        Events.findOne({_id:id} , (err , result)=>{
+          if(!err){
+            res.render("event/edit",{event :result,eventDate :moment(result.date).format('YYYY-MM-DD'),numberofnotifications:response ,errors :req.flash("editErrors") , title:"Edit"});
+          }else{console.log(err);}
+        });
+      }else{
+        console.log(err);
+      }
+    });
+});
+
 
 });
 
@@ -204,27 +252,94 @@ check('date').isLength({ min: 5 }).withMessage("please add a valid date ")
 //show single event
 router.get("/show/:id",nocache ,isAuthenticated, (req,res)=>
 {
-  const id = req.params.id;
-  Events.findOne({_id : id} , (err,result)=>{
-    if(!err)
-    {
-      res.render('event/show' , {event :result , title:result.title });
-    }else{
-      console.log(err);
-    }
-  });
+
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+    const id = req.params.id;
+    Notifications.findOne({sendTo:req.user.id , eventId:id , type:'invite'} , (err , invite)=>{
+      if(!err){
+        if(invite)
+        {
+          Events.findOne({_id : id} , (err,result)=>{
+            if(!err)
+            {
+              res.render('event/show' , {event :result ,numberofnotifications:response,invitedSpeaker : 'invited',notificationid:invite.id  , title:result.title });
+            }else{
+              console.log(err);
+            }
+          });
+        }else
+        {
+          Meeting.findOne({eventId:id , speakerId:req.user.id} , (err , found)=>{
+            if(!err)
+            {
+               if(found){
+                 Events.findOne({_id : id} , (err,result)=>{
+                   if(!err)
+                   {
+                     res.render('event/show' , {event :result ,numberofnotifications:response,meetingId:found.id,invitedSpeaker : 'allreadySpeaker'  , title:result.title });
+                   }else{
+                     console.log(err);
+                   }
+                 });
+               }else
+               {
+                 Events.findOne({_id : id} , (err,result)=>{
+                   if(!err)
+                   {
+                     res.render('event/show' , {event :result ,numberofnotifications:response,invitedSpeaker : 'notSpeaker'  , title:result.title });
+                   }else{
+                     console.log(err);
+                   }
+                 });
+               }
+
+
+            }
+          });
+        }
+      }
+    });
+
+     // Meeting.findOne({eventId:id , speakerId:req.user.id} , (err , found)=>{
+     //   if(!err)
+     //   {
+     //
+     //       Events.findOne({_id : id} , (err,result)=>{
+     //         if(!err)
+     //         {
+     //           res.render('event/show' , {event :result ,numberofnotifications:response,invitedSpeaker : found  , title:result.title });
+     //         }else{
+     //           console.log(err);
+     //         }
+     //       });
+     //
+     //   }
+     // });
+
+
+
+
+
+
+
+});
+
 
 });
 
 router.get("/delete/:id",nocache,isAuthenticated, (req,res)=>{
-  Events.findOne({_id :req.params.id} , (err,result)=>{
-    if(!err)
-    {
-      res.render('event/delete' , {event :result , title:"delete" });
-    }else{
-      console.log(err);
-    }
-  });
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+
+      Events.findOne({_id :req.params.id} , (err,result)=>{
+        if(!err)
+        {
+          res.render('event/delete' , {event :result , title:"delete" ,numberofnotifications:response });
+        }else{
+          console.log(err);
+        }
+      });
+});
+
 
 });
 
@@ -249,22 +364,26 @@ router.post("/deleteevent" , (req,res)=>{
 //add speakers
 
 router.get("/speakers/showSpeakers/:skills?", (req,res)=>{
-  let skills = req.params.skills ;
-  //var array = JSON.parse("[" + skills + "]");
-  Events.findOne({_id:eventId} , (err,event)=>{
-    if(!err)
-    {
-      console.log(event);
-      var array = skills.split(",").map(String);
+  GetnumbersOfUsernotification(req.user.id).then(response => {
 
-      User.find( {isSpeaker:true ,  skills: { $all: array } }  , (err , users)=>{
-        if(!err){
+    let skills = req.params.skills ;
+    //var array = JSON.parse("[" + skills + "]");
+    Events.findOne({_id:eventId} , (err,event)=>{
+      if(!err)
+      {
+        console.log(event);
+        var array = skills.split(",").map(String);
 
-      res.render("event/showSpeakers" , {speakers : users ,eventId :eventId ,event:event , skillsneeded:array,  title:"Speakers" } );
-        }
-      });
-    }
-  });
+        User.find( {isSpeaker:true , skills: { $all: array } }  , (err , users)=>{
+          if(!err){
+
+        res.render("event/showSpeakers" , {speakers : users ,eventId :eventId ,numberofnotifications:response,event:event , skillsneeded:array,  title:"Speakers" } );
+          }
+        });
+      }
+    });
+});
+
 
 
 
@@ -305,7 +424,17 @@ router.get("/:pageNo?",nocache, (req,res)=>
       for(let i=0 ; i<results.length ; i+=chunckSize){
         chunk.push(results.slice(i,chunckSize+i));
       }
+      if(!(req.user)){
         res.render('event/index' , {allEvents:chunk , message : req.flash("info") , title:"Home Page" , total:parseInt(totalDocs),pageNo:pageNo});
+
+      }else{
+        GetnumbersOfUsernotification(req.user.id).then(response => {
+          res.render('event/index' , {allEvents:chunk ,numberofnotifications:response, message : req.flash("info") , title:"Home Page" , total:parseInt(totalDocs),pageNo:pageNo});
+
+        });
+
+
+      }
 
       }else{
         console.log(err);
