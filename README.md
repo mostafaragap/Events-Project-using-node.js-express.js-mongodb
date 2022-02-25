@@ -21,3 +21,7 @@ Events project is an Social wep app  , users can register and post his own event
 
 # Running (Speaker/s invite based on skills needed that user selected when he Post a new Event)
 ![SPEAKER](https://user-images.githubusercontent.com/33907092/155242382-ec4e446e-8d22-4c54-96cc-42a3af3c6d37.png)
+
+# Running (notifications  , speaker can accept or discard event invitation )
+![speaker accept or discard](https://user-images.githubusercontent.com/33907092/155766407-458754f6-d2e2-4b24-b15c-9b94500ef294.png)
+
