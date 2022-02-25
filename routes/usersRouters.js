@@ -28,11 +28,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 //middleware to check if user is authenticated
 const auth = require("../config/auth");
+const functions = require("../config/functions");
 
 
 const Events = require("../models/Event");
 const Notifications = require("../models/notifications");
-
+ const Meeting = require("../models/meeting");
 //require bodyParse
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({extended: true}));
@@ -43,7 +44,11 @@ router.get("/login",nocache , (req,res) =>{
   res.render("user/login" , {error : req.flash('error')   ,title:"Sign In"});
 
 });
+ //function to get numbers of user Notifications
+ const GetnumbersOfUsernotification = (uId) => {
 
+   return  Notifications.countDocuments({sendTo:uId}) ;
+ };
 
 
 //login submit
@@ -77,42 +82,38 @@ router.post('/signUp',
       }
     );
 
+
+
+
 // profile
 router.get('/profile',nocache,isAuthenticated ,(req,res)=> {
   let user_skills = req.user.skills ;
   var elmts = Skills.filter(f => !user_skills.includes(f));
 
+  GetnumbersOfUsernotification(req.user.id).then(response => {
 
-      Events.countDocuments({author:req.user.id} , (err , result)=>{
-        if(err){console.log(err);}else{
-          if((req.user.isSpeaker)){
-            res.render('user/profile', {
-                events : result,
-                title:req.user.firstName +' ' + req.user.lastName ,
-                skills:elmts ,
-                exist : req.flash("exist"),
-
-
-            });
-          }else
+    Events.countDocuments({author:req.user.id} , (err , result)=>{
+      if(err){console.log(err);}else{
+        if((req.user.isSpeaker)){
           res.render('user/profile', {
               events : result,
-              title:req.user.firstName +' ' + req.user.lastName,
-
+              title:req.user.firstName +' ' + req.user.lastName ,
+              skills:elmts ,
+              exist : req.flash("exist"),
+              numberofnotifications:response
 
           });
-        }
-      });
+        }else
+        res.render('user/profile', {
+            events : result,
+            title:req.user.firstName +' ' + req.user.lastName,
+            numberofnotifications:response
 
+        });
+      }
+    });
 
-
-
-
-
-
-
-
-
+});
 
 });
 
@@ -143,7 +144,14 @@ router.get('/logout',nocache, function(req, res, next) {
 
 router.get('/editProfile',nocache, function(req, res, next) {
 
-    res.render('user/editProfile' , {title:"Edit My Profile info" });
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+
+      res.render('user/editProfile'  ,{title:"Edit My Profile info" ,numberofnotifications:response });
+
+
+});
+
+
 
 });
 
@@ -207,6 +215,80 @@ router.patch('/deleteSkill/:skillName' , (req,res)=>{
   });
 
 });
+
+//get notification page
+router.get('/notifications' ,nocache, (req,res,next)=>{
+
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+
+   Notifications.find({sendTo:req.user.id , type:'invite'} , (err , results) =>{
+res.render("user/notificationsPage" , {notifications:results ,numberofnotifications:response , title:"notifications" });
+
+   });
+
+
+});
+});
+
+//view Profile
+router.get("/userProfile/:userId",nocache,isAuthenticated, (req,res) =>{
+  GetnumbersOfUsernotification(req.user.id).then(response => {
+
+   Notifications.find({sendTo:req.user.id} , (err , results) =>{
+     let userId = req.params.userId ;
+     let query = {_id:userId};
+     User.findOne(query,(err , user)=>{
+     if(err){console.log(err);}else{
+       Events.countDocuments({author:userId} , (err , result)=>{
+         if(err){console.log(err);}else{
+           res.render('user/userProfile' , {userProfile:user,events :result, title:"View User Profile" ,numberofnotifications:response });
+         }
+       });
+
+     }
+     });
+
+   });
+
+});
+
+});
+
+
+
+//speaker Action
+
+router.post('/speakersAction' , (req,res) =>{
+
+ if(req.body.accept)
+ {
+   Notifications.findOneAndUpdate({id:req.body.accept} , {type:"confirmed"} ,(err , result)=>{
+     if(!(err))
+     {
+       const accept = new Meeting({
+         author:req.body.author ,
+         eventId:req.body.eventId,
+         speakerId:req.user.id ,
+         created_At:Date.now()
+       });
+       accept.save();
+       res.redirect("/users/notificationsPage");
+     }
+   });
+
+ }else{
+  Notifications.findOneAndUpdate({id:req.body.discard} , {type:"discard"} ,(err ,result )=>{
+if(!err){
+  console.log('siscarded');
+}
+
+  });
+ }
+
+
+
+});
+
 
 
 

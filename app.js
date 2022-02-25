@@ -6,6 +6,7 @@ const app=express();
 const db = require('./config/database');
 const Notifications = require("./models/notifications");
 
+
 ///session and flash
 const session = require('express-session');
  const flash = require('connect-flash');

@@ -20,6 +20,9 @@
             <input type="hidden" value="<%=speaker.id%>" name="speakerId">
           <input type="hidden" value="<%=skillsneeded%>" name="skillsneeded">
             <input type="hidden" value="<%=eventId%>" name="eventId">
+            <input type="hidden" value="<%=event.title%>" name="eventTitle">
+            <input type="hidden" value="<%=event.date%>" name="eventDate">
+              
          <%let spId = speaker.id %>
             <%if(!(event.speakersAdded.includes(spId))){%>
 

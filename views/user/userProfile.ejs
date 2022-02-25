@@ -1,4 +1,5 @@
-<%- include("../partials/adminLayout"); -%>
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
 
 <section class="section about-section gray-bg" id="about">
             <div class="container">
@@ -6,14 +7,8 @@
                     <div class="col-lg-6">
                         <div class="about-text go-to">
                             <h3 class="dark-color"><%=userProfile.firstName+" " + userProfile.lastName %> Profile</h3>
-                            <%if(!(userProfile.isSpeaker)){%>
-                              <h6 class="theme-color lead">Event Publisher in events website</h6>
-                              <p>I <mark>Event Publisher </mark> in events website </p>
-                            <%}else{%>
-                              <h6 class="theme-color lead">Event Speaker in events website</h6>
-                              <p>I <mark>Event Speaker </mark> in events website </p>
-                            <%}%>
-
+                            <h6 class="theme-color lead">Event Publisher in events website</h6>
+                            <p>I <mark>Event Publisher </mark> in events website </p>
                             <div class="row about-list">
                                 <div class="col-md-6">
                                     <div class="media">
@@ -60,12 +55,6 @@
                           <%}%>
 
 
-
-
-
-<%- include("../partials/adminFooter"); -%>
-
-
                         </div>
                     </div>
                 </div>
@@ -87,24 +76,13 @@
 
                         <div class="col-6 col-lg-3">
                             <div class="count-data text-center">
-                                <h6 class="count h2" data-to="190" data-speed="190"><%=userProfile.created_At.toDateString()%></h6>
-                                <p class="m-0px font-w-600">Registered At</p>
+
                             </div>
                         </div>
-                      <div class="col-6 col-lg-3">
-                           <%if(!(userProfile.isAdmin)){%>
-                             <button class="btn btn-danger" onclick="deleteUser()" id="deleteUserBtn" data-id="<%= userProfile.id%>">Delete</button>
-                            <% if(userProfile.isActive === false){%>
-                                  <button class="btn btn-primary" onclick="unblockUser()" id="unblockUserBtn" data-id="<%= userProfile.id%>">Unblock</button>
-                            <% }else{%>
-                               <button class="btn btn-warning" onclick="blockUser()" id="blockUserBtn" data-id="<%= userProfile.id%>">block</button>
-                           <%}%>
 
-
-                           <%}%>
-
-                          </div>
                     </div>
                 </div>
             </div>
         </section>
+
+          <%- include("../partials/footer"); -%>

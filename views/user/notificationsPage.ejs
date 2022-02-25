@@ -1,0 +1,90 @@
+
+<%- include("../partials/header"); -%>
+<%- include("../partials/navbar"); -%>
+
+
+
+<%- include("../partials/flashMessages"); -%>
+
+
+
+<%if((notifications.length>0)){%>
+  <section class="section about-section gray-bg" id="about">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-9 col">
+          <div class="about-text go-to">
+            <h3 class="dark-color">Notifications</h3>
+
+            <div class="right">
+                <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">Recent</h6>
+                    </div>
+                    <%notifications.forEach((notification)=>{%>
+                      <div class="box-body p-0 ">
+                          <div class="p-3 d-flex align-items-center bg-light border-bottom">
+
+                                  <img class="avatarCircle rounded-circle" src="/images/<%=notification.senderImg%>" alt="" />
+
+                              <div class="fw-bold" style="margin-right:3rem">
+
+                                  <div><a href="<%='/users/userProfile/'+ notification.senderId %>" style="text-decoration:none"><%=notification.senderName + ' '%></a>invite you to attend his Event   <a href="<%='/events/show/'+ notification.eventId %>" style="text-decoration:none"><%=' '+ notification.eventTitle%></a> at: <span class="badge bg-secondary"><%=notification.eventDate.toDateString()%></span>
+
+   </div>
+                                  <div class="small fw-normal">Hello,<%='  ' +user.firstName +' '%>i would like to invite you to attend my Event as a speaker </div>
+                              </div>
+                              <span class="ml-auto mb-auto">
+                                  <div class="btn-group">
+                                      <button type="button" class="btn btn-light btn-sm rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                      </button>
+                                      <div class="dropdown-menu dropdown-menu-right">
+
+                                            <a class="dropdown-item" href="/events/show/<%=notification.eventId%>" ><i class="fas fa-check"></i> Confirm</a>
+                                          <button class="dropdown-item" type="button"><i class="far fa-trash-alt"></i> Delete</button>
+
+                                      </div>
+                                  </div>
+                                  <br />
+                                  <div class="text-right text-muted pt-1">3d</div>
+                              </span>
+                          </div>
+
+                      </div>
+                    <%})%>
+
+
+
+
+                </div>
+
+            </div>
+
+  </div>
+
+  </div>
+
+
+                    </div>
+
+                    </div>
+                    </section>
+
+<%}else {%>
+  <div class="container" style="height:460px">
+    <div class="mt-5">
+      <div class="text-center">
+        <div class="alert alert-primary" role="alert">
+    Sorry you do not have new notifications
+      </div>
+      </div>
+    </div>
+
+  </div>
+
+
+<%}%>
+
+                  <%- include("../partials/footer"); -%>

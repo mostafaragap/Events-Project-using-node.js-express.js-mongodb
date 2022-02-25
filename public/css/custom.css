@@ -398,3 +398,18 @@ hr .new1 {
  .notificationbadge {
   top: -10px;
 }
+/* notification page */
+.dropdown-list-image {
+
+    height: 2.5rem;
+    width: 2.5rem;
+}
+.avatarCircle {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+.btn-light {
+    color: #2cdd9b;
+    background-color: #e5f7f0;
+    border-color: #d8f7eb;
+}

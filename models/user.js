@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
      Default: false
    },
    skills :{
-     type:[String]  
+     type:[String]
     // required: true
    }
 
